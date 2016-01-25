@@ -131,3 +131,31 @@ class ContactController(base.BaseController):
         else:
             vars = {'data': data, 'errors': errors, 'error_summary': error_summary}
             return p.toolkit.render('contact/form.html', extra_vars=vars)
+            
+    def form_suggest(self):
+
+        """
+        Return a contact form
+        :return: html
+        """
+
+        data = {}
+        errors = {}
+        error_summary = {}
+
+        # Submit the data
+        if 'save' in request.params:
+            data, errors, error_summary = self._submit(self.context)
+        else:
+            # Try and use logged in user values for default values
+            try:
+                data['name'] = base.c.userobj.fullname or base.c.userobj.name
+                data['email'] = base.c.userobj.email
+            except AttributeError:
+                data['name'] = data['email'] = None
+
+        if data.get('success', False):
+            return p.toolkit.render('contact/success.html')
+        else:
+            vars = {'data': data, 'errors': errors, 'error_summary': error_summary}
+            return p.toolkit.render('contact/form_suggest.html', extra_vars=vars)

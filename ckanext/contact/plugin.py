@@ -34,6 +34,10 @@ class ContactPlugin(p.SingletonPlugin):
         map.connect('contact_ajax_submit', '/contact/ajax',
                     controller='ckanext.contact.controllers.contact:ContactController',
                     action='ajax_submit')
+                    
+        map.connect('suggest_form', '/suggest',
+                    controller='ckanext.contact.controllers.contact:ContactController',
+                    action='form_suggest')
 
         return map
 
